@@ -8,7 +8,6 @@ final class CalendarEventRepository extends AbstractRepository
 {
     public function getCalendarEventsInRange(array $range): array
     {   
-        //TODO: te parsowanie do ::date nie jest dobrym pomysłen, bo nie dziala indexowanie
         $sql = 'SELECT * FROM calendar_events WHERE start_date <= (:end_date) AND end_date >= (:start_date)';
 
         return $this->fetchAll($sql, $range);

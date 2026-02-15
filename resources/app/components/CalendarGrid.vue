@@ -2,7 +2,7 @@
 import { useCalendarStore } from '@/stores/calendar';
 import type { CalendarEvent } from '@/types/calendarEvent';
 import { computed, onMounted, ref, watch, type CSSProperties } from 'vue';
-import CalendarDialog from './CalendarEventDialog.vue';
+import CalendarDialog from '@/components/CalendarEventDialog.vue';
 
 const calendarStore = useCalendarStore();
 

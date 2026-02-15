@@ -1,11 +1,10 @@
 import axios, { HttpStatusCode } from "axios";
-import router from "./router";
-import { useAuthStore } from "./stores/auth";
-
+import router from "@/router";
+import { useAuthStore } from "@/stores/auth";
+import type { Csrf } from "@/types/csrf";
 
 const api = axios.create({
-    baseURL: '/api',
-    withCredentials: true
+    baseURL: '/api'
 });
 
 api.interceptors.request.use(
@@ -13,10 +12,10 @@ api.interceptors.request.use(
         if (config.method && ['post', 'put', 'patch', 'delete'].includes(config.method)) {
 
             try {
-                const response = await api.get<{csrf_name: string, csrf_value: string}>(`/csrf-token`);
+                const { data } = await api.get<Csrf>(`/csrf-token`);
             
-                config.headers['csrf_name'] = response.data.csrf_name;
-                config.headers['csrf_value'] = response.data.csrf_value;
+                config.headers['csrf_name'] = data.csrf_name;
+                config.headers['csrf_value'] = data.csrf_value;
             } catch(err) {
                 Promise.reject(err);
             }

@@ -1,6 +1,5 @@
 import api from "@/api";
 import type { CalendarEvent } from "@/types/calendarEvent";
-import type { CalendarEventForm } from "@/types/calendarEventForm";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 

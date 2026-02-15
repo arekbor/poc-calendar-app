@@ -47,9 +47,7 @@ final class DefaultErrorHandler
                 ->withJson($data)
             ;
         } else {
-            if ($_ENV['APP_ENV'] === 'dev') {
-                throw $exception;
-            }
+            if ($_ENV['APP_ENV'] === 'dev') throw $exception;
         }
 
         return $this->decoratedResponseFactory

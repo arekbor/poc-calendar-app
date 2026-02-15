@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Dialog from './Dialog.vue';
+import Dialog from '@/components/Dialog.vue';
 import type { CalendarEventForm } from '@/types/calendarEventForm';
 import { useCalendarStore } from '@/stores/calendar';
 
