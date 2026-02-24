@@ -54,18 +54,51 @@ final class CreateCalendarEventAction extends AbstractAction
             throw new UnprocessableEntityException('Start date should be earlier than end date.');
         }
 
-        //TODO: event nie moze pokrywać się z istniejącym!
+        if (!$body['isRecurring']) {
+            //TODO: check if event exists in range
+            $calendarEvent = [
+                'title' => $body['title'],
+                'start_date' => $start->format(\DateTime::ATOM),
+                'end_date' => $end->format(\DateTime::ATOM),
+                'color' => $body['color']
+            ];
 
-        $calendarEvent = [
-            'title' => $body['title'],
-            'start_date' => $start->format(\DateTime::ATOM),
-            'end_date' => $end->format(\DateTime::ATOM),
-            'color' => $body['color']
-        ];
+            $lastInsertId = $this->calendarEventEepository->create($calendarEvent);
+            $calendarEvent['id'] = $lastInsertId;
 
-        $lastInsertId = $this->calendarEventEepository->create($calendarEvent);
-        $calendarEvent['id'] = $lastInsertId;
+            return $this->getResponse()->withJson($calendarEvent, StatusCodeInterface::STATUS_CREATED);
+        }
 
-        return $this->getResponse()->withJson($calendarEvent, StatusCodeInterface::STATUS_CREATED);
+        //convert to local tz because Daylight saving time!
+        $localTz = new \DateTimeZone('Europe/Warsaw');
+        $utcTz   = new \DateTimeZone('UTC');
+
+        $startLocal = new \DateTimeImmutable($body['start_date'])->setTimezone($localTz);
+        $endLocal = new \DateTimeImmutable($body['end_date'])->setTimezone($localTz);
+
+        $endOfYear = (clone $startLocal)->modify('last day of December this year');
+        $interval = new \DateInterval('P1W');
+        $duration = $startLocal->diff($endLocal);
+
+        $period = new \DatePeriod($startLocal, $interval, $endOfYear);
+
+        foreach ($period as $eventStartLocal) {
+            $eventEndLocal = (clone $eventStartLocal)->add($duration);
+
+            // konwersja DO UTC dopiero przy zapisie
+            $eventStartUtc = $eventStartLocal->setTimezone($utcTz);
+            $eventEndUtc   = $eventEndLocal->setTimezone($utcTz);
+
+            $calendarEvent = [
+                'title' => $body['title'],
+                'start_date' => $eventStartUtc->format(\DateTime::ATOM),
+                'end_date'   => $eventEndUtc->format(\DateTime::ATOM),
+                'color' => $body['color']
+            ];
+
+            $this->calendarEventEepository->create($calendarEvent);
+        }
+
+        return $this->getResponse();
     }
 }
