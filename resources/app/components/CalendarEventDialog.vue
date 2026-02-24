@@ -57,8 +57,8 @@ const onCreateSubmit = async () => {
 
         await calendarStore.addCalendarEvent({
             title:  form.value.title,
-            start_date: start_date,
-            end_date: end_date,
+            start_date: start_date.toISOString(),
+            end_date: end_date.toISOString(),
             color: form.value.color
         }); 
 

@@ -46,6 +46,7 @@ final class CreateCalendarEventAction extends AbstractAction
             throw new UnprocessableEntityException('End format is not valid.');
         }
 
+        //TODO: teoretycznie to nie jest potrzebne
         $utc = new \DateTimeZone('UTC');
         $start = new \DateTimeImmutable($body['start_date'])->setTimezone($utc);
         $end = new \DateTimeImmutable($body['end_date'])->setTimezone($utc);

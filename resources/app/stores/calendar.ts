@@ -1,4 +1,5 @@
 import api from "@/api";
+import type { AddCalendarEvent } from "@/types/addCalendarEvent";
 import type { CalendarEvent } from "@/types/calendarEvent";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -20,6 +21,8 @@ export const useCalendarStore = defineStore('calendar', () => {
     };
 
     const parseCalendarEvent = (calendarEvent: CalendarEvent): CalendarEvent => {
+        console.log(calendarEvent);
+
         return {
             ...calendarEvent,
             start_date: new Date(calendarEvent.start_date),
@@ -35,8 +38,8 @@ export const useCalendarStore = defineStore('calendar', () => {
         events.value = data.map(parseCalendarEvent);
     };
 
-    const addCalendarEvent = async (calendarEvent: Omit<CalendarEvent, 'id'>) => {
-        const { data } = await api.post<CalendarEvent>('/calendarEvent', calendarEvent);
+    const addCalendarEvent = async (addCalendarEvent: AddCalendarEvent) => {
+        const { data } = await api.post<CalendarEvent>('/calendarEvent', addCalendarEvent);
 
         events.value.push(parseCalendarEvent(data));
     };
