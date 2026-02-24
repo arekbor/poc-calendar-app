@@ -2,5 +2,6 @@ export interface AddCalendarEvent {
     title: string,
     start_date: string,
     end_date: string,
-    color: string|null
+    color: string|null,
+    isRecurring: boolean
 }

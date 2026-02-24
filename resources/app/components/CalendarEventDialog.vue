@@ -13,7 +13,8 @@ const form = ref<CalendarEventForm>({
     title: null,
     start_date: null,
     end_date: null,
-    color: null
+    color: null,
+    isRecurring: false,
 })
 
 const loading = ref(false);
@@ -59,7 +60,8 @@ const onCreateSubmit = async () => {
             title:  form.value.title,
             start_date: start_date.toISOString(),
             end_date: end_date.toISOString(),
-            color: form.value.color
+            color: form.value.color,
+            isRecurring: form.value.isRecurring
         }); 
 
         closeCalendarEventDialog();
@@ -147,6 +149,11 @@ defineExpose({
             <div class="form-cell">
                 <label for="end">End</label>
                 <input type="datetime-local" name="end" id="end" v-model="form.end_date" />
+            </div>
+
+            <div class="form-cell">
+                <label for="is-recurring">Recurring</label>
+                <input type="checkbox" name="is-recurring" id="is-recurring" v-model="form.isRecurring" />
             </div>
 
             <div class="form-cell">

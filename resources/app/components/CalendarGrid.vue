@@ -49,7 +49,8 @@ const onAddEvent = (dayGridDate: Date, weekCellHour: number) => {
         title: '',
         start_date: dateToString(start),
         end_date: dateToString(end),
-        color: null
+        color: null,
+        isRecurring: false,
     });
 };
 
@@ -59,7 +60,8 @@ const onEditEvent = (calendarEvent: CalendarEvent) => {
         title: calendarEvent.title,
         start_date: dateToString(calendarEvent.start_date),
         end_date: dateToString(calendarEvent.end_date),
-        color: calendarEvent.color
+        color: calendarEvent.color,
+        isRecurring: false,
     })
 };
 
